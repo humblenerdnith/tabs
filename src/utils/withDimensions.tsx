@@ -29,14 +29,15 @@ export default function withDimensions<Props extends InjectedProps>(
         dimensions: { width, height },
         isLandscape: isOrientationLandscape({ width, height }),
       };
+      this.dimensionsSubscription = null
     }
 
     componentDidMount() {
-      Dimensions.addEventListener('change', this.handleOrientationChange);
+      this.dimensionsSubscription = Dimensions.addEventListener('change', this.handleOrientationChange);
     }
 
     componentWillUnmount() {
-      Dimensions.removeEventListener('change', this.handleOrientationChange);
+      this.dimensionsSubscription?.remove();
     }
 
     handleOrientationChange = ({ window }: { window: ScaledSize }) => {
